@@ -10,8 +10,15 @@ const BlogBody = () => {
     return <div>Post not found</div>;
   }
 
+  const postContentStyle: React.CSSProperties = {
+    maxWidth: "60%",
+    margin: "0 auto",
+    textAlign: "left",
+    padding: "2rem",
+  };
+
   return (
-    <div>
+    <div style={postContentStyle}>
       <PostContent />
     </div>
   );
