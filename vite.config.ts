@@ -25,4 +25,7 @@ export default defineConfig({
       exclude: ["**/*.mdx"],
     }),
   ],
+  resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.tsx']
+  }
 });
