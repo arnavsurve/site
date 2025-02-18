@@ -11,8 +11,8 @@ const Home = () => {
       <a href="https://linkedin.com/in/arnavsurve">linkedin</a>
       <br />
       <p>
-        I'm Arnav, I study Computer Science at CSU Sacramento. Currently working
-        on <a href="https://ynot.lol">Y</a>, a social platform for the{" "}
+        Studying Computer Science at CSU Sacramento. Currently working on{" "}
+        <a href="https://ynot.lol">Y</a>, a social platform for the{" "}
         <a href="https://en.wikipedia.org/wiki/Semantic_Web">semantic web</a>.
       </p>
       <hr style={{ borderColor: "gray" }} />
