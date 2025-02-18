@@ -4,13 +4,21 @@ import mdx from "@mdx-js/rollup";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 import remarkGfm from "remark-gfm";
+import remarkRehype from "remark-rehype";
 import rehypeHighlight from "rehype-highlight";
 
 export default defineConfig({
   plugins: [
     mdx({
-      remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter, remarkGfm],
-      rehypePlugins: [rehypeHighlight],
+      remarkPlugins: [
+        remarkFrontmatter,
+        remarkMdxFrontmatter,
+        remarkGfm,
+        [remarkRehype, { allowDangerousHtml: true }]
+      ],
+      rehypePlugins: [
+        [rehypeHighlight, { ignoreMissing: true }]
+      ],
     }),
     react({
       include: ["**/*.jsx", "**/*.tsx"],
