@@ -1,0 +1,104 @@
+---
+title: Implementing an Agentic AI Job Scheduler
+date: 2025-02-17
+---
+
+# Implementing an Agentic AI Job Scheduler
+
+February 17, 2025
+
+About a month ago, I started writing a distributed job scheduler as an exercise in system design and Go programming. It uses a dynamically sized worker
+pool and Redis pub/sub to delegate jobs between workers and runs each job via a syscall in its own thread using goroutines. This honestly
+turned out to be more straightforward than I anticipated, and I got to a point to where I was happy with my implementation in about 1-2 weeks.
+
+[https://github.com/arnavsurve/promise](https://github.com/arnavsurve/promise)
+
+After this, I explored the idea of each worker node being an AI agent. My hypothesis was that the end product, not taking into
+consideration actual LLM bottlenecks, would enable a job scheduler to execute more complex and open ended tasks by leveraging the autonomy of
+computer use agents, as well as theoretically making a system more robust by having agents independently triage, document, and fix breaking
+issues. For example, a job might look like
+
+"Run maintenance on this server. Create backups of all databases in the application Docker container and ensure SSL certs are up to date.
+Repeat interval 2 weeks."
+
+rather than manually scripting this work and queuing up those scripts in a job scheduler.
+
+This could
+
+1. Allow self-contained, automatic retry mechanisms on failure via feedback loops on error
+2. Open up possibilities for autonomy in higher level tasks; concepts like "server maintenance" or "compliance auditing"
+
+My implementation uses the [Groq](https://groq.com) API using the llama-3.3-70b-versatile CoT model, with the master node acting as a decomposition
+agent. It takes a high level, natural language task and breaks it down into subtasks.
+
+A simple job might look like:
+
+"Log the temperature (Fahrenheit) in Sacramento, CA to the file 'var/log/weather.txt' every 2 hours via Bash script. Use a free, public weather API that does not
+require an API key."
+
+The master scheduler, in this case also a master decomposition agent, would then break this job into subtasks such as:
+
+```json
+{
+	"subtask_id": 1,
+	"job": "Write a bash script to query https://api.weather.gov for the current temperature in Sacramento, CA. Log this data into the file /var/log/weather.txt.",
+	"type": "code_generation",
+	"dependencies": []
+},
+{
+	"subtask_id": 2,
+	"job": "Create a cron job to run the bash script every 2 hours.",
+	"type": "command_execution",
+	"dependencies": [1]
+},
+{
+	"subtask_id": 3,
+	"job": "Restart the cron daemon to ensure that the new cron configuration is loaded and the job starts executing.",
+	"type": "command_execution",
+	"dependencies": [1, 2]
+},
+{
+	"subtask_id": 4,
+	"job": "Monitor the target file to ensure the job runs as intended. If not, submit a new job to the scheduler to fix the issue.",
+	"type": "job_verification",
+	"dependencies": [3]
+}
+```
+
+Note that each subtask type has a corresponding agent with an appropriate system prompt relevant to the task type. For example, a `code_generation`
+agent is instructed to simply generate code and return a JSON object of the code and target output file. Also note that each task object contains a
+dependency array of subtask IDs that indicate a worker node should not start on this task if it depends on tasks that have not yet completed.
+
+Though the runtime of a job, agents are instructed to document instructions and relevant information to the task they just completed to be passed
+along as part of the context window to the next agent. For example, this might look like a description of what a script does, where it is located,
+and how to run it.
+
+## Takeaways
+
+As you might imagine, delegating atomic parts of a job to separate agents introduced much entropy in the system. The process of passing
+context between agents ended up causing agents' context windows to fill up, especially in jobs containing many subtasks with each previous worker
+writing and passing along documentation for the next. I also ran into constraints regarding computer use.
+
+For example, a `command_execution` agent was designed to essentially write a Bash one-liner to 'golf' its task. These agents output their one-liner
+to be run via Go `os.exec` subprocess call. This hit bottlenecks quickly, as it was impossible for an agent to execute subsequent commands. Imagine
+creating a Python virtualenv, entering it, installing dependencies, and running the Python script. This would be impossible with the current implementation.
+Similarly, with an agent tasked with writing code, this design of one agent per atomic task (code file) would introduce immense overhead in writing multiple
+files and having them interop, while also being passed between agents. Something like [Aider](https://aider.chat/) would be a perfect fit, if not for
+the fact that an agent would only be able to call Aider once, passing a single query + arguments without being able to actually interact with the CLI for
+subsequent instructions.
+
+It has become apparent that in order to get past these blockers, I need to implement a way for an agent to interact with the operating system headlessly. One
+possible solution I have looked into is agentic tool use, which allows for extension of an agent's capabilities via external, predefined functions. In the
+case of `command_execution`, a function could be defined to allow an agent to execute arbitrary commands and receive output multiple times throughout its runtime.
+See [LangChain tool use](https://python.langchain.com/docs/integrations/chat/reka/#define-the-tools). Although this would be a much better implementation to golfing Bash one-liners,
+the issue of entering environments or interacting with CLIs remains.
+
+A logical next step would be an entire headless shell for an agent to interface with. This would open up possibilities for using tools such as Aider, but more importantly 
+would allow an agent to operate within a shell continuously. Following the point of entropy, a better implementation would involve a single agent executing a job end-to-end. This 
+would save valuable space in its context window, as well as improve consistency in executing tasks without having to pass context between multiple detached agents.
+
+Ultimately, this comes down to empowering an agent to operate autonomously within a headless shell, interfacing with the OS and CLI natively.
+
+More to come soon.
+
+Arnav
