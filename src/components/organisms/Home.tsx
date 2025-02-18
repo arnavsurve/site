@@ -4,7 +4,7 @@ const Home = () => {
   //https://64.media.tumblr.com/dbfb353e4457dc889bb160ae4a849772/7c4eef3239d7163b-be/s2048x3072/88fb52061037283353688a2f130cee47b6698408.jpg
   return (
     <div>
-      <h1>Arnav Surve</h1>
+      <h1>Arnav Surve test edit</h1>
 
       <a href="https://github.com/arnavsurve">github</a>
       <br />
