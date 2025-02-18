@@ -10,6 +10,8 @@ const Home = () => {
       <br />
       <a href="https://linkedin.com/in/arnavsurve">linkedin</a>
       <br />
+      <a href="mailto:arnav@surve.dev">arnav@surve.dev</a>
+      <br />
       <p>
         Studying Computer Science at CSU Sacramento. Currently working on{" "}
         <a href="https://ynot.lol">Y</a>, a social platform for the{" "}
