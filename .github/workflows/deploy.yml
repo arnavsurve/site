@@ -12,6 +12,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+
       - name: Install dependencies and build
         run: |
           npm install
@@ -20,7 +25,17 @@ jobs:
       - name: List build output
         run: ls -la
 
-      - name: Deploy to EC2
+      - name: Deploy to EC2 instance
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: 22
+          source: "dist/"
+          target: "/var/www/site"
+
+      - name: Reload Nginx
         uses: appleboy/ssh-action@v0.1.8
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -28,14 +43,5 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |
-            cd site
-            echo "Current working directory: $(pwd)"
-            echo "Listing repository root (inside site):"
-            ls -la
-            echo "Listing contents of ./dist:"
-            ls -la ./dist
-
-            rsync -avz --delete ./dist/ /var/www/site/
-
             sudo chown -R nginx:nginx /var/www/site
             sudo systemctl restart nginx
