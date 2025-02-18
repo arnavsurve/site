@@ -28,6 +28,14 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |
+            cd site
+            echo "Current working directory: $(pwd)"
+            echo "Listing repository root (inside site):"
+            ls -la
+            echo "Listing contents of ./dist:"
+            ls -la ./dist
+
             rsync -avz --delete ./dist/ /var/www/site/
-            sudo chown -R nginx:nginx /var/www/site/
+
+            sudo chown -R nginx:nginx /var/www/site
             sudo systemctl restart nginx
