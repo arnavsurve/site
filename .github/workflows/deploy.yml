@@ -17,6 +17,9 @@ jobs:
           npm install
           npm run build
 
+      - name: List build output
+        run: ls -la
+
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v0.1.8
         with:
