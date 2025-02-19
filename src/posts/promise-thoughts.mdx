@@ -33,8 +33,11 @@ agent. It takes a high level, natural language task and breaks it down into subt
 
 A simple job might look like:
 
-"Log the temperature (Fahrenheit) in Sacramento, CA to the file 'var/log/weather.txt' every 2 hours via Bash script. Use a free, public weather API that does not
-require an API key."
+```html
+Log the temperature (Fahrenheit) in Sacramento, CA to the file 
+'var/log/weather.txt' every 2 hours via Bash script. Use a free, 
+public weather API that does not require an API key.
+```
 
 The master scheduler, in this case also a master decomposition agent, would then break this job into subtasks such as:
 
