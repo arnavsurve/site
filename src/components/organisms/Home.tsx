@@ -4,7 +4,7 @@ const Home = () => {
   //https://64.media.tumblr.com/dbfb353e4457dc889bb160ae4a849772/7c4eef3239d7163b-be/s2048x3072/88fb52061037283353688a2f130cee47b6698408.jpg
   return (
     <div>
-      <h2>Arnav Surve</h2>
+      <h2 style={{ marginTop: 0 }}>Arnav Surve</h2>
 
       <a href="https://github.com/arnavsurve">github</a>
       <br />
@@ -13,7 +13,7 @@ const Home = () => {
       <a href="mailto:arnav@surve.dev">arnav@surve.dev</a>
       <br />
       <p>
-        Studying Computer Science at CSU Sacramento. Currently working on{" "}
+        Studying Computer Science at CSU Sacramento. Currently building{" "}
         <a href="https://ynot.lol">Y</a>, a social platform for the{" "}
         <a href="https://en.wikipedia.org/wiki/Semantic_Web">semantic web</a>.
       </p>
