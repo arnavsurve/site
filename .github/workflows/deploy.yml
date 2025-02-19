@@ -15,7 +15,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: "20"
 
       - name: Install dependencies and build
         run: |
@@ -24,6 +24,17 @@ jobs:
 
       - name: List build output
         run: ls -la
+
+      - name: Prepare scp action
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: 22
+          script: |
+            sudo chown -R ec2-user:ec2-user /var/www/site
+            ls -la /var/www/site
 
       - name: Deploy to EC2 instance
         uses: appleboy/scp-action@v0.1.7
@@ -44,4 +55,5 @@ jobs:
           port: 22
           script: |
             sudo chown -R nginx:nginx /var/www/site
+            ls -la /var/www/site
             sudo systemctl restart nginx
