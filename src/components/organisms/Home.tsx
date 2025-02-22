@@ -23,7 +23,7 @@ const Home = () => {
       <br />
       <br />
       <img
-        src="https://64.media.tumblr.com/03c0d4ed6d7eafddb1804ebc0c50db6d/a780219e2a19ac39-18/s400x600/fb3f824ef76cc729dc548820ee74296dbbdb5b89.gifv"
+        src="https://64.media.tumblr.com/4b6908703d6c69c9f949927a22441172/c05ac8de92e52b38-42/s2048x3072/1db0b2c4fd4f89c571865ac3ace9fe8da2d1b9f0.jpg"
         alt=""
         style={{ maxWidth: "250px" }}
       />
