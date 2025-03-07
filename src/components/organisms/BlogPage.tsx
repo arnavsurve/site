@@ -3,7 +3,7 @@ import BlogBody from "../molecules/BlogBody";
 const BlogPage = () => {
   return (
     <>
-      <a href="/">Back</a>
+      <a href="/writing">Back</a>
       <BlogBody></BlogBody>
     </>
   );
