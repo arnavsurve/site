@@ -15,8 +15,7 @@ const Home = () => {
       <br />
       <p>
         I write software and study the human condition. Currently building{" "}
-        <a href="https://ynot.lol">Y</a>, a social platform for the{" "}
-        <a href="https://en.wikipedia.org/wiki/Semantic_Web">semantic web</a>.
+        <a href="https://y.lol">Y</a>.
       </p>
       <hr style={{ borderColor: "gray" }} />
 
@@ -55,7 +54,7 @@ const Home = () => {
           style={{ maxWidth: "250px" }}
         />
         <h2 style={{ marginBottom: "0.5rem" }}>Notes</h2>
-        <small>will open source all my notes eventually</small>
+        <small>will open source all my notes after I'm famous</small>
       </div>
     </div>
   );
