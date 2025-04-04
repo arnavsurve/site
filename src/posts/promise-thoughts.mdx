@@ -1,13 +1,13 @@
 ---
-title: Implementing an Agentic AI Job Scheduler
+title: Strange Agent Orchestrator
 date: 2025-02-17
 ---
 
-# Implementing an Agentic AI Job Scheduler
+# Strange Agent Orchestrator
 
 February 17, 2025
 
-About a month ago, I started writing a distributed job scheduler as an exercise in system design and Go programming. It uses a dynamically sized worker
+Wrote a distributed job scheduler as an exercise in system design and Go. It uses a dynamically sized worker
 pool and Redis pub/sub to delegate jobs between workers and runs each job via a syscall in its own thread using goroutines. This honestly
 turned out to be more straightforward than I anticipated, and I got to a point to where I was happy with my implementation in about 1-2 weeks.
 
