@@ -15,7 +15,7 @@ const Home = () => {
       <br />
       <p>
         I write software and study the human condition. Currently building{" "}
-        <a href="https://grace-lang.org">Grace</a>.
+        <a href="https://graceinfra.org">Grace</a>.
       </p>
       <hr style={{ borderColor: "gray" }} />
 
